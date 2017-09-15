@@ -687,7 +687,11 @@ module JSONAPI
         joins = []
 
         associations.inject do |prev, current|
-          joins << "LEFT JOIN #{current.table_name} AS #{current.name}_sorting ON #{current.name}_sorting.id = #{prev.table_name}.#{current.foreign_key}"
+          if current.belongs_to?
+            joins << "LEFT JOIN #{current.table_name} AS #{current.name}_sorting ON #{current.name}_sorting.id = #{prev.table_name}.#{current.foreign_key}"
+          else
+            joins << "LEFT JOIN #{current.table_name} AS #{current.name}_sorting ON #{current.name}_sorting.#{current.foreign_key}= #{prev.table_name}.id"
+          end
           current
         end
         joins.join("\n")
