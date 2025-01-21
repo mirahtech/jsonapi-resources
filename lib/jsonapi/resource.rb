@@ -811,7 +811,7 @@ module JSONAPI
       def verify_filter(filter, raw, context = nil)
         filter_values = []
         if raw.present?
-          filter_values += raw.is_a?(String) ? CSV.parse_line(raw) : [raw]
+          filter_values += raw.is_a?(String) ? CSV.parse_line(raw, liberal_parsing: true) : [raw]
         end
 
         strategy = _allowed_filters.fetch(filter, Hash.new)[:verify]
